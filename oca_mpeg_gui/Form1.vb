@@ -1,9 +1,9 @@
 ﻿Public Class Form1
 
     Private Sub CheckAndAdjust()
-        If IO.Path.GetExtension(InputLocation.Text).Contains(".oca") Then ExtractRButton.Checked = True Else CompressRButton.Checked = True
+        If IO.Path.GetExtension(InputLocation.Text).ToLower().Contains(".oca") Then ExtractRButton.Checked = True Else CompressRButton.Checked = True
         If ExtractRButton.Checked Then
-            OutputLocation.Text = IO.Path.GetFileNameWithoutExtension(InputLocation.Text)
+            OutputLocation.Text = IO.Path.GetDirectoryName(InputLocation.Text) + "\" + IO.Path.GetFileNameWithoutExtension(InputLocation.Text)
         Else
             OutputLocation.Text = InputLocation.Text + ".oca"
         End If
@@ -45,7 +45,7 @@
         If CompressRButton.Checked Then
             CMD = CompressionLevel.Value.ToString() + " " + ChunkSizeTxt.Text + " """ + OutputLocation.Text + """ """ + InputLocation.Text + """"
         Else
-            CMD = "d """ + OutputLocation.Text + """ """ + InputLocation.Text + """"
+            CMD = "d """ + InputLocation.Text + """ """ + OutputLocation.Text + """"
         End If
         Dim StartThread = New Threading.Thread(Sub() TaskThread(CMD))
         StartThread.Start()
@@ -112,6 +112,10 @@
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If Not IO.File.Exists("oca_mpeg.exe") Then
+            MessageBox.Show("oca_mpeg.exe does not exist. Exiting.")
+            Me.Close()
+        End If
         CompressRButton.Checked = My.Settings.CompressChecked
         ExtractRButton.Checked = My.Settings.ExtractChecked
         CompressionLevel.Value = My.Settings.CompressionLevel

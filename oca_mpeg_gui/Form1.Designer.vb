@@ -47,6 +47,7 @@ Partial Class Form1
         Me.Log = New System.Windows.Forms.RichTextBox()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
+        Me.GenerateBatchScriptOnly = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -73,6 +74,7 @@ Partial Class Form1
         '
         'Panel1
         '
+        Me.Panel1.Controls.Add(Me.GenerateBatchScriptOnly)
         Me.Panel1.Controls.Add(Me.Label6)
         Me.Panel1.Controls.Add(Me.StartBtn)
         Me.Panel1.Controls.Add(Me.GroupBox2)
@@ -300,6 +302,16 @@ Partial Class Form1
         '
         Me.OpenFileDialog1.FileName = "OpenFileDialog1"
         '
+        'GenerateBatchScriptOnly
+        '
+        Me.GenerateBatchScriptOnly.AutoSize = True
+        Me.GenerateBatchScriptOnly.Location = New System.Drawing.Point(239, 231)
+        Me.GenerateBatchScriptOnly.Name = "GenerateBatchScriptOnly"
+        Me.GenerateBatchScriptOnly.Size = New System.Drawing.Size(153, 17)
+        Me.GenerateBatchScriptOnly.TabIndex = 17
+        Me.GenerateBatchScriptOnly.Text = "Only generate Batch Script"
+        Me.GenerateBatchScriptOnly.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AllowDrop = True
@@ -347,4 +359,5 @@ Partial Class Form1
     Friend WithEvents ClearLogBtn As Button
     Friend WithEvents OpenFileDialog1 As OpenFileDialog
     Friend WithEvents SaveFileDialog1 As SaveFileDialog
+    Friend WithEvents GenerateBatchScriptOnly As CheckBox
 End Class

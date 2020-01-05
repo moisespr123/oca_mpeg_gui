@@ -39,16 +39,21 @@
     End Sub
 
     Private Sub StartBtn_Click(sender As Object, e As EventArgs) Handles StartBtn.Click
-        StartBtn.Enabled = False
-        SaveLogBtn.Enabled = False
         Dim CMD As String = String.Empty
         If CompressRButton.Checked Then
             CMD = CompressionLevel.Value.ToString() + " " + ChunkSizeTxt.Text + " """ + OutputLocation.Text + """ """ + InputLocation.Text + """"
         Else
             CMD = "d """ + InputLocation.Text + """ """ + OutputLocation.Text + """"
         End If
-        Dim StartThread = New Threading.Thread(Sub() TaskThread(CMD))
-        StartThread.Start()
+        If Not GenerateBatchScriptOnly.Checked Then
+            StartBtn.Enabled = False
+            SaveLogBtn.Enabled = False
+            Dim StartThread = New Threading.Thread(Sub() TaskThread(CMD))
+            StartThread.Start()
+        Else
+            IO.File.WriteAllText(IO.Path.ChangeExtension(OutputLocation.Text, ".bat"), IO.Path.GetDirectoryName(Process.GetCurrentProcess.MainModule.FileName) + "\oca_mpeg.exe " + CMD + " & pause")
+            MsgBox("Batch file written to the output location.")
+        End If
     End Sub
 
     Private Sub TaskThread(CMD As String)
@@ -118,6 +123,7 @@
         End If
         CompressRButton.Checked = My.Settings.CompressChecked
         ExtractRButton.Checked = My.Settings.ExtractChecked
+        GenerateBatchScriptOnly.Checked = My.Settings.GenerateBatchScriptOnly
         CompressionLevel.Value = My.Settings.CompressionLevel
         ChunkSizeTxt.Text = My.Settings.ChunkSize
         CompressionLevel.Minimum = 1
@@ -145,5 +151,10 @@
     Private Sub Form1_DragDrop(sender As Object, e As DragEventArgs) Handles MyBase.DragDrop
         InputLocation.Text = CType(e.Data.GetData(DataFormats.FileDrop), String())(0)
         CheckAndAdjust()
+    End Sub
+
+    Private Sub GenerateBatchScriptOnly_CheckedChanged(sender As Object, e As EventArgs) Handles GenerateBatchScriptOnly.CheckedChanged
+        My.Settings.GenerateBatchScriptOnly = GenerateBatchScriptOnly.Checked
+        My.Settings.Save()
     End Sub
 End Class
